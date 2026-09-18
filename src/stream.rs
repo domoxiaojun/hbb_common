@@ -37,6 +37,9 @@ impl Stream {
     /// The largest message the peer may send. Lowered before authorization, where nothing a peer
     /// legitimately sends is large, so an unauthenticated connection cannot make us hold more than
     /// that. Each transport clamps `n` to its own ceiling, so `usize::MAX` restores the default.
+    ///
+    /// Set it before the first read of untrusted data. Lowering it later is not a way to constrain
+    /// a message already in progress: what that does to one is up to the transport.
     #[inline]
     pub fn set_max_packet_length(&mut self, n: usize) {
         match self {
